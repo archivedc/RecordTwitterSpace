@@ -79,7 +79,7 @@ def recordAudio(stream_url, filename):
     cmd.run()
 
 
-def generate_filename(metadata):
+def generate_filename(metadata, admins):
     space_id = metadata['rest_id']
     space_title = metadata['title']
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
 
     #space_state = metadata['state']
 
-    dirname, filename = generate_filename(metadata)
+    dirname, filename = generate_filename(metadata, admins)
 
     Path(dirname).mkdir(parents=True, exist_ok=True)
 
