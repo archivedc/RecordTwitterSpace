@@ -79,26 +79,33 @@ def recordAudio(stream_url, filename):
     cmd.run()
 
 
-if (len(sys.argv) != 2):
-    print('Usage: ./main.py <space_id>')
-    exit(1)
+def generate_filename(metadata):
+    space_id = metadata['rest_id']
+    space_title = metadata['title']
 
-metadata, admins, streaming_url = getStreamingUrl(sys.argv[1])
+    first_admin = admins[0]
 
-space_id = metadata['rest_id']
-space_title = metadata['title']
-#space_state = metadata['state']
+    dirname = 'records/' + first_admin['user']['rest_id'] + \
+        '_' + first_admin['twitter_screen_name']
 
-first_admin = admins[0]
+    filename = space_title + '_' + space_id + '.aac'
 
-dirname = 'records/' + first_admin['user']['rest_id'] + \
-    '_' + first_admin['twitter_screen_name']
-
-filename = space_title + '_' + space_id + '.aac'
+    return dirname, filename
 
 
-Path(dirname).mkdir(parents=True, exist_ok=True)
+if __name__ == '__main__':
+    if (len(sys.argv) != 2):
+        print('Usage: ./main.py <space_id>')
+        exit(1)
 
-# print(streaming_url)
+    metadata, admins, streaming_url = getStreamingUrl(sys.argv[1])
 
-recordAudio(streaming_url, dirname + '/' + filename)
+    #space_state = metadata['state']
+
+    dirname, filename = generate_filename(metadata)
+
+    Path(dirname).mkdir(parents=True, exist_ok=True)
+
+    # print(streaming_url)
+
+    recordAudio(streaming_url, dirname + '/' + filename)
