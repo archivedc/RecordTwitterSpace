@@ -5,7 +5,7 @@ from pathlib import Path
 
 import requests
 import ffmpeg
-
+from django.utils.text import slugify
 
 # References:
 #  - https://note.com/kohnoselami/n/nb8ef0eea5831
@@ -88,7 +88,8 @@ def generate_filename(metadata, admins):
     dirname = 'records/' + first_admin['user']['rest_id'] + \
         '_' + first_admin['twitter_screen_name']
 
-    filename = space_title + '_' + space_id + '.aac'
+    filename = slugify(space_title, allow_unicode=True) + \
+        '_' + space_id + '.aac'
 
     return dirname, filename
 
@@ -100,7 +101,10 @@ if __name__ == '__main__':
 
     metadata, admins, streaming_url = getStreamingUrl(sys.argv[1])
 
-    #space_state = metadata['state']
+    space_state = metadata['state']
+
+    print(space_state)
+    exit
 
     dirname, filename = generate_filename(metadata, admins)
 
